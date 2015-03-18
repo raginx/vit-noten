@@ -1,26 +1,28 @@
 package de.my.vitnoten;
 
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Menu;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.ProgressBar;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.ProgressBar;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.custom.StyledText;
 
 public class VITNoten {
 
@@ -99,8 +101,53 @@ public class VITNoten {
 		Menu menu = new Menu(shlNoten, SWT.BAR);
 		shlNoten.setMenuBar(menu);
 		
-		MenuItem mntmDatei = new MenuItem(menu, SWT.NONE);
+		MenuItem mntmDatei = new MenuItem(menu, SWT.CASCADE);
 		mntmDatei.setText("Datei");
+		
+		Menu menu_1 = new Menu(mntmDatei);
+		mntmDatei.setMenu(menu_1);
+		
+		MenuItem mntmffnen = new MenuItem(menu_1, SWT.NONE);
+		mntmffnen.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fd = new FileDialog(shlNoten, SWT.OPEN);
+				fd.setFilterExtensions(new String[] { "*.vit", "*.*"});
+				String file = fd.open();
+				if(file != null) {
+					readFile(file);
+				}
+				
+			}
+		});
+		mntmffnen.setText("\u00D6ffnen");
+		
+		MenuItem mntmSpeichern = new MenuItem(menu_1, SWT.NONE);
+		mntmSpeichern.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fd = new FileDialog(shlNoten, SWT.SAVE);
+				fd.setFilterExtensions(new String[] { "*.vit", "*.*"});
+				String file = fd.open();
+				if(file != null) {
+					writeFile(file);
+				}
+				
+			}
+		});		
+		mntmSpeichern.setText("Speichern");
+		
+		new MenuItem(menu_1, SWT.SEPARATOR);
+		
+		MenuItem mntmBeenden = new MenuItem(menu_1, SWT.NONE);
+		mntmBeenden.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		mntmBeenden.setText("Beenden");
+		
 		
 		MenuItem mntmAbout = new MenuItem(menu, SWT.NONE);
 		mntmAbout.setText("About");
@@ -452,5 +499,111 @@ public class VITNoten {
 		
 		this.stResult.setText("Dein Ergebnis: " + String.valueOf(result));
 				
+	}
+	
+	
+	private void readFile(String filename) {
+		System.out.println("Read file: " + filename);
+		
+		String grades = "";
+		BufferedReader br = null;
+	    try {
+	    	br = new BufferedReader(new FileReader(filename));
+	        StringBuilder sb = new StringBuilder();
+	        String line = br.readLine();
+
+	        while (line != null) {
+	            sb.append(line);
+	            sb.append(System.lineSeparator());
+	            line = br.readLine();
+	        }
+	        grades = sb.toString();
+	    } catch (IOException e) {
+	    	// nothing, not important :)
+	    } finally {
+	        try {
+				br.close();
+			} catch (IOException e) {}
+	    }
+	    
+	    if(grades.length() > 0) {
+	    	String[] parts = grades.split(";");
+	    	this.spinnerK1.setSelection(Integer.valueOf(parts[0]));
+	    	this.spinnerK2.setSelection(Integer.valueOf(parts[1]));
+	    	this.spinnerK3.setSelection(Integer.valueOf(parts[2]));
+	    	this.spinnerK4.setSelection(Integer.valueOf(parts[3]));
+	    	
+	    	this.spinnerM3.setSelection(Integer.valueOf(parts[4]));
+	    	this.spinnerM4.setSelection(Integer.valueOf(parts[5]));
+	    	this.spinnerM5.setSelection(Integer.valueOf(parts[6]));
+	    	this.spinnerM6.setSelection(Integer.valueOf(parts[7]));
+	    	this.spinnerM7.setSelection(Integer.valueOf(parts[8]));
+	    	this.spinnerM8.setSelection(Integer.valueOf(parts[9]));
+	    	this.spinnerM9.setSelection(Integer.valueOf(parts[10]));
+	    	this.spinnerM10.setSelection(Integer.valueOf(parts[11]));
+	    	this.spinnerM11.setSelection(Integer.valueOf(parts[12]));
+	    	this.spinnerM12.setSelection(Integer.valueOf(parts[13]));
+	    	this.spinnerM13.setSelection(Integer.valueOf(parts[14]));
+	    	this.spinnerM14.setSelection(Integer.valueOf(parts[15]));
+	    	this.spinnerM15.setSelection(Integer.valueOf(parts[16]));
+	    	this.spinnerM22.setSelection(Integer.valueOf(parts[17]));
+	    	this.spinnerM34.setSelection(Integer.valueOf(parts[18]));
+	    	this.spinnerM35.setSelection(Integer.valueOf(parts[19]));
+	    	
+	    	this.spinnerPraktikum.setSelection(Integer.valueOf(parts[20]));
+	    	this.spinnerDiplSchr.setSelection(Integer.valueOf(parts[21]));
+	    	this.spinnerDiplPrsi.setSelection(Integer.valueOf(parts[22]));
+	    	this.spinnerDiplMndl.setSelection(Integer.valueOf(parts[23]));
+	    	
+	    }
+	}
+	
+	private void writeFile(String filename) {
+		System.out.println("Write file: " + filename);
+		
+		String data = "";
+		data = data + this.spinnerK1.getText() + ";";
+		data = data + this.spinnerK2.getText() + ";";
+		data = data + this.spinnerK3.getText() + ";";
+		data = data + this.spinnerK4.getText() + ";";
+		
+		data = data + this.spinnerM3.getText() + ";";
+		data = data + this.spinnerM4.getText() + ";";
+		data = data + this.spinnerM5.getText() + ";";
+		data = data + this.spinnerM6.getText() + ";";
+		data = data + this.spinnerM7.getText() + ";";
+		data = data + this.spinnerM8.getText() + ";";
+		data = data + this.spinnerM9.getText() + ";";
+		data = data + this.spinnerM10.getText() + ";";
+		data = data + this.spinnerM11.getText() + ";";
+		data = data + this.spinnerM12.getText() + ";";
+		data = data + this.spinnerM13.getText() + ";";
+		data = data + this.spinnerM14.getText() + ";";
+		data = data + this.spinnerM15.getText() + ";";
+		data = data + this.spinnerM22.getText() + ";";
+		data = data + this.spinnerM34.getText() + ";";
+		data = data + this.spinnerM35.getText() + ";";
+		
+		data = data + this.spinnerPraktikum.getText() + ";";
+		
+		data = data + this.spinnerDiplSchr.getText() + ";";
+		data = data + this.spinnerDiplPrsi.getText() + ";";
+		data = data + this.spinnerDiplMndl.getText() + ";";
+		
+		try {
+			File file = new File(filename);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(data);
+			bw.close();
+			
+		} catch(IOException e) {
+			
+		}
+	
 	}
 }
