@@ -28,6 +28,7 @@ public class VITNoten {
 
 	protected Shell shlNoten;
 	
+	protected ProgressBar progressBar;
 	// All the Module Spinners
 	protected Spinner spinnerK1;
 	protected Spinner spinnerK2;
@@ -116,6 +117,8 @@ public class VITNoten {
 				String file = fd.open();
 				if(file != null) {
 					readFile(file);
+					setProgress();
+					calculateGrade();
 				}
 				
 			}
@@ -152,7 +155,7 @@ public class VITNoten {
 		MenuItem mntmAbout = new MenuItem(menu, SWT.NONE);
 		mntmAbout.setText("About");
 		
-		ProgressBar progressBar = new ProgressBar(shlNoten, SWT.NONE);
+		progressBar = new ProgressBar(shlNoten, SWT.NONE);
 		progressBar.setBounds(10, 10, 559, 17);
 		
 		Group grpModulnoten = new Group(shlNoten, SWT.NONE);
@@ -441,7 +444,7 @@ public class VITNoten {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				calculateGrade();
-				
+				setProgress();
 			}
 		};
 		
@@ -499,6 +502,37 @@ public class VITNoten {
 		
 		this.stResult.setText("Dein Ergebnis: " + String.valueOf(result));
 				
+	}
+	
+	private void setProgress() {
+		//21
+		int count = 0;
+		if(this.spinnerK1.getText().equals("0") && this.spinnerK2.getText().equals("0") && this.spinnerK3.getText().equals("0") && this.spinnerK4.getText().equals("0")) count++;
+		
+		if(this.spinnerM3.getText().equals("0")) count++;
+		if(this.spinnerM4.getText().equals("0")) count++;
+		if(this.spinnerM5.getText().equals("0")) count++;
+		if(this.spinnerM6.getText().equals("0")) count++;
+		if(this.spinnerM7.getText().equals("0")) count++;
+		if(this.spinnerM8.getText().equals("0")) count++;
+		if(this.spinnerM9.getText().equals("0")) count++;
+		if(this.spinnerM10.getText().equals("0")) count++;
+		if(this.spinnerM11.getText().equals("0")) count++;
+		if(this.spinnerM12.getText().equals("0")) count++;
+		if(this.spinnerM13.getText().equals("0")) count++;
+		if(this.spinnerM14.getText().equals("0")) count++;
+		if(this.spinnerM15.getText().equals("0")) count++;
+		if(this.spinnerM22.getText().equals("0")) count++;
+		if(this.spinnerM34.getText().equals("0")) count++;
+		if(this.spinnerM35.getText().equals("0")) count++;
+		
+		if(this.spinnerPraktikum.getText().equals("0")) count++;
+		if(this.spinnerDiplSchr.getText().equals("0")) count++;
+		if(this.spinnerDiplMndl.getText().equals("0")) count++;
+		if(this.spinnerDiplPrsi.getText().equals("0")) count++;
+		
+		this.progressBar.setMaximum(21);
+		this.progressBar.setSelection((21 - count));
 	}
 	
 	
