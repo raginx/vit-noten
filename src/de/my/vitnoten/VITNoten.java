@@ -13,11 +13,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.custom.StyledText;
 
 public class VITNoten {
 
@@ -52,6 +55,7 @@ public class VITNoten {
 	protected Spinner spinnerDiplMndl;
 	protected Spinner spinnerDiplPrsi;
 	
+	protected StyledText stResult;
 	
 
 	/**
@@ -382,11 +386,71 @@ public class VITNoten {
 		grpErgebnis.setText("Ergebnis");
 		grpErgebnis.setBounds(10, 346, 559, 82);
 		
-
+		this.stResult = new StyledText(grpErgebnis, SWT.READ_ONLY);
+		stResult.setBounds(10, 23, 539, 49);
+		
+		
+		ModifyListener ml = new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				calculateGrade();
+				
+			}
+		};
+		
+		this.spinnerK1.addModifyListener(ml);
+		this.spinnerK2.addModifyListener(ml);
+		this.spinnerK3.addModifyListener(ml);
+		this.spinnerK4.addModifyListener(ml);
+		
+		this.spinnerM3.addModifyListener(ml);
+		this.spinnerM4.addModifyListener(ml);
+		this.spinnerM5.addModifyListener(ml);
+		this.spinnerM6.addModifyListener(ml);
+		this.spinnerM7.addModifyListener(ml);
+		this.spinnerM8.addModifyListener(ml);
+		this.spinnerM9.addModifyListener(ml);
+		this.spinnerM10.addModifyListener(ml);
+		this.spinnerM11.addModifyListener(ml);
+		this.spinnerM12.addModifyListener(ml);
+		this.spinnerM13.addModifyListener(ml);
+		this.spinnerM14.addModifyListener(ml);
+		this.spinnerM15.addModifyListener(ml);
+		this.spinnerM22.addModifyListener(ml);
+		this.spinnerM34.addModifyListener(ml);
+		this.spinnerM35.addModifyListener(ml);
+		
+		this.spinnerPraktikum.addModifyListener(ml);
+		this.spinnerDiplSchr.addModifyListener(ml);
+		this.spinnerDiplMndl.addModifyListener(ml);
+		this.spinnerDiplPrsi.addModifyListener(ml);
+		
 
 	}
 	
 	
-
-	
+	private void calculateGrade() {
+		double zp = (Double.valueOf(this.spinnerK1.getText()) + Double.valueOf(this.spinnerK2.getText()) + Double.valueOf(this.spinnerK3.getText()) + Double.valueOf(this.spinnerK4.getText())) / 4;
+		zp = zp * 0.05;
+		
+		double mp = (Double.valueOf(this.spinnerM3.getText()) + Double.valueOf(this.spinnerM4.getText()) + Double.valueOf(this.spinnerM5.getText()) + Double.valueOf(this.spinnerM6.getText()) +   
+				Double.valueOf(this.spinnerM7.getText()) + Double.valueOf(this.spinnerM8.getText()) + Double.valueOf(this.spinnerM9.getText()) + Double.valueOf(this.spinnerM10.getText()) +    
+				Double.valueOf(this.spinnerM11.getText()) + Double.valueOf(this.spinnerM12.getText()) + Double.valueOf(this.spinnerM13.getText()) + Double.valueOf(this.spinnerM14.getText()) +    
+				Double.valueOf(this.spinnerM15.getText()) + Double.valueOf(this.spinnerM22.getText()) + Double.valueOf(this.spinnerM34.getText()) + Double.valueOf(this.spinnerM35.getText())) / 16;    
+		
+		mp = mp * 0.7;
+		
+		double pp = Double.valueOf(this.spinnerPraktikum.getText()) * 0.05; 
+				
+		double dp = (Double.valueOf(this.spinnerDiplSchr.getText()) * 0.75) + (Double.valueOf(this.spinnerDiplPrsi.getText()) * 0.1) + (Double.valueOf(this.spinnerDiplMndl.getText()) * 0.15);
+		dp = dp * 0.2;
+		
+		double result = zp + mp + pp + dp;
+		if(result > 5) {
+			result = Math.round(result);
+		}
+		
+		this.stResult.setText("Dein Ergebnis: " + String.valueOf(result));
+				
+	}
 }
