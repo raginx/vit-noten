@@ -94,7 +94,7 @@ public class VITNoten {
 	 */
 	protected void createContents() {
 		shlNoten = new Shell(SWT.CLOSE | SWT.TITLE | SWT.MIN);
-		shlNoten.setSize(585, 497);
+		shlNoten.setSize(585, 512);
 		shlNoten.setText("VIT Noten");
 		//shellNoten.setImage(SWTResourceManager.getImage("images/diplomaicon.png"));
 		shlNoten.setLayout(null);
@@ -434,10 +434,10 @@ public class VITNoten {
 		
 		Group grpErgebnis = new Group(shlNoten, SWT.NONE);
 		grpErgebnis.setText("Ergebnis");
-		grpErgebnis.setBounds(10, 346, 559, 82);
+		grpErgebnis.setBounds(10, 346, 559, 108);
 		
 		this.stResult = new StyledText(grpErgebnis, SWT.READ_ONLY);
-		stResult.setBounds(10, 23, 539, 49);
+		stResult.setBounds(10, 23, 539, 75);
 		
 		
 		ModifyListener ml = new ModifyListener() {
@@ -481,26 +481,23 @@ public class VITNoten {
 	
 	private void calculateGrade() {
 		double zp = (Double.valueOf(this.spinnerK1.getText()) + Double.valueOf(this.spinnerK2.getText()) + Double.valueOf(this.spinnerK3.getText()) + Double.valueOf(this.spinnerK4.getText())) / 4;
-		zp = zp * 0.05;
 		
 		double mp = (Double.valueOf(this.spinnerM3.getText()) + Double.valueOf(this.spinnerM4.getText()) + Double.valueOf(this.spinnerM5.getText()) + Double.valueOf(this.spinnerM6.getText()) +   
 				Double.valueOf(this.spinnerM7.getText()) + Double.valueOf(this.spinnerM8.getText()) + Double.valueOf(this.spinnerM9.getText()) + Double.valueOf(this.spinnerM10.getText()) +    
 				Double.valueOf(this.spinnerM11.getText()) + Double.valueOf(this.spinnerM12.getText()) + Double.valueOf(this.spinnerM13.getText()) + Double.valueOf(this.spinnerM14.getText()) +    
 				Double.valueOf(this.spinnerM15.getText()) + Double.valueOf(this.spinnerM22.getText()) + Double.valueOf(this.spinnerM34.getText()) + Double.valueOf(this.spinnerM35.getText())) / 16;    
 		
-		mp = mp * 0.7;
 		
-		double pp = Double.valueOf(this.spinnerPraktikum.getText()) * 0.05; 
+		double pp = Double.valueOf(this.spinnerPraktikum.getText()); 
 				
 		double dp = (Double.valueOf(this.spinnerDiplSchr.getText()) * 0.75) + (Double.valueOf(this.spinnerDiplPrsi.getText()) * 0.1) + (Double.valueOf(this.spinnerDiplMndl.getText()) * 0.15);
-		dp = dp * 0.2;
 		
-		double result = zp + mp + pp + dp;
+		double result = (zp * 0.05) + (mp * 0.7) + (pp * 0.05) + (dp * 0.2);
 		if(result > 5) {
 			result = Math.round(result);
 		}
 		
-		this.stResult.setText("Dein Ergebnis: " + String.valueOf(result));
+		this.stResult.setText("Ergebnis Zwischenprüfung: "+ String.valueOf(zp)+"\nErgebnis Module: "+String.valueOf(mp)+"\nErgebnis Diplomprüfung: "+String.valueOf(dp)+"\nGesamt: " + String.valueOf(result));
 				
 	}
 	
