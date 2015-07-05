@@ -493,11 +493,12 @@ public class VITNoten {
 		double dp = (Double.valueOf(this.spinnerDiplSchr.getText()) * 0.75) + (Double.valueOf(this.spinnerDiplPrsi.getText()) * 0.1) + (Double.valueOf(this.spinnerDiplMndl.getText()) * 0.15);
 		
 		double result = (zp * 0.05) + (mp * 0.7) + (pp * 0.05) + (dp * 0.2);
+		double resultround = result;
 		if(result > 5) {
-			result = Math.round(result);
+			resultround = Math.round(result);
 		}
 		
-		this.stResult.setText("Ergebnis Zwischenprüfung: "+ String.valueOf(zp)+"\nErgebnis Module: "+String.valueOf(mp)+"\nErgebnis Diplomprüfung: "+String.valueOf(dp)+"\nGesamt: " + String.valueOf(result));
+		this.stResult.setText("Ergebnis Zwischenprüfung: "+ String.valueOf(zp)+"\nErgebnis Module: "+String.valueOf(mp)+"\nErgebnis Diplomprüfung: "+String.valueOf(dp)+"\nGesamt: " + String.valueOf(resultround) + "(" + String.valueOf(result) + ")");
 				
 	}
 	
